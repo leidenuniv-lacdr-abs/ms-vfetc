@@ -1,3 +1,5 @@
+#!/usr/bin/env php
+
 <?php
 
 	/* MS Vendor feature export converter */
