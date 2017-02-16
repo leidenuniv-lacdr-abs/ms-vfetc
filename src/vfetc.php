@@ -88,7 +88,7 @@
 					break;
 				}				
 
-				if (strpos($line, 'IS Name') > 0 && strpos($line, 'Component Name') > 0 && strpos($line, 'IS Retention Time') > 0){
+				if (strpos($line, 'IS Name') > 0 && strpos($line, 'Component Name') > 0 && strpos($line, 'Retention Time') > 0){
 					$parser = new SciexParser();
 					break;
 				}				
