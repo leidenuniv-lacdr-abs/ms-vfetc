@@ -7,7 +7,13 @@
 			$lines = file($file);
 			$columnHeader = array();
 			$fileData = array();
+			
 			$batch = @reset(explode('.', end(explode('batch', end(explode('/', strtolower($file)))))));
+
+			if ($batch != (int) $batch){
+				$batch = reset(explode('.', end(explode('/', $file))));
+			}
+			
 			$samples = array();
 
 			try {

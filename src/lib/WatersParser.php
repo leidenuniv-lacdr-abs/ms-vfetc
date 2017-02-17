@@ -11,6 +11,9 @@
 			$columnHeader = array();
 
 			$batch = @reset(explode('.', end(explode('batch', end(explode('/', strtolower($file)))))));			
+			if ($batch != (int) $batch){
+				$batch = reset(explode('.', end(explode('/', $file))));
+			}
 
 			try {
 				foreach ($lines as $lIdx => $line){

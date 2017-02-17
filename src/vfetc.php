@@ -30,6 +30,12 @@
 	$files = explode(',',$_GET['files']);
 	$outputfile = $_GET['outputfile'];
 
+	foreach ($files as $key => $file) {
+		print("\nAdding file: " . $file);
+	}
+	print("\nSettings output path to: " . $outputfile . "\n");
+
+
 	$parsers = array();
 	$parserDetect = new ParserDetect();
 	foreach ($files as $fIdx => $file){ 

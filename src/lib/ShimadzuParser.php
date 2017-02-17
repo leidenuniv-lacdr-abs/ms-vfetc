@@ -5,6 +5,9 @@
 		
 			// batch info
 			$batch = @reset(explode('.', end(explode('batch', end(explode('/', strtolower($file)))))));						
+			if ($batch != (int) $batch){
+				$batch = reset(explode('.', end(explode('/', $file))));
+			}
 
 			$fileData = array();
 			$columnHeader = array();

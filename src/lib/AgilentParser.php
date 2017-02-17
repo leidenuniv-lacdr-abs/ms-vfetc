@@ -11,6 +11,9 @@
 
 			// batch info
 			$batch = @reset(explode('.', end(explode('batch', end(explode('/', strtolower($file)))))));			
+			if ($batch != (int) $batch){
+				$batch = reset(explode('.', end(explode('/', $file))));
+			}
 			
 			$lines = file($file);
 			foreach ($lines as $lIdx => $line){	
