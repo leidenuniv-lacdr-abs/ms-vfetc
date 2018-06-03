@@ -140,13 +140,18 @@
 							}
 						}
 
+                        $injection = (int) $sampleName[-1];
+                        $replicate = $sampleName[-2];
+
 						$samples[$sampleName] = array(
 										'name'=>$sampleName,
 										'file'=>$measurement['file'],
 										'type'=>$sampleType,
 										'batch'=>$batch,
 										'datetime'=>$measurement['datetime'],
-										'calno'=>$calNo
+										'calno'=>$calNo,
+                                        'injection'=>$injection,
+                                        'replicate'=>$replicate
 									);
 
 						// save measurement

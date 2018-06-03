@@ -61,7 +61,10 @@
 										$sampleType = 'cal'; 
 										$fileDataRow[$fileHeader[0][$hlIdx]]['calno'] = $intCal;	
 									}
-								} 
+								}
+
+                                $fileDataRow[$fileHeader[0][$hlIdx]]['injection'] = (int) $fileDataRow[$fileHeader[0][$hlIdx]]['name'][-1];
+                                $fileDataRow[$fileHeader[0][$hlIdx]]['replicate'] = $fileDataRow[$fileHeader[0][$hlIdx]]['name'][-2];
 							
 								$fileDataRow[$fileHeader[0][$hlIdx]]['type'] = $sampleType;	
 								$fileDataRow[$fileHeader[0][$hlIdx]]['batch'] = $batch;	

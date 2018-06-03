@@ -65,7 +65,11 @@
 										$sampleType = 'cal'; 
 										$calno = $intCal;	
 									}
-								}	
+								}
+
+                                $samples[$sampleName]['Sample']['injection'] = (int) $sampleName[-1];
+                                $samples[$sampleName]['Sample']['replicate'] = $sampleName[-2];
+
 								$samples[$sampleName]['Sample']['type'] = $sampleType;	
 								$samples[$sampleName]['Sample']['calno'] = $calno;					
 

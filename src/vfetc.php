@@ -83,24 +83,27 @@
 
 				if (strpos($line, 'Compound Summary Report') > 0){
 					$parser = new WatersParser();
+					print("Detected Waters file\n");
 					break;
 				}
-				
+
 				if (strlen($line) >= 3 && substr($line, 0, 3) == 'ID#' && substr($lines[($lIdx+1)], 0, 4) == 'Name'){
 					$parser = new ShimadzuParser();
+					print("Detected Shimadzu file\n");
+					break;
+				}
+
+				if (strpos($line, 'IS Name') > 0 && strpos($line, 'Component Name') > 0 && strpos($line, 'Retention Time') > 0){
+					$parser = new SciexParser();
+					print("Detected Sciex file\n");
 					break;
 				}
 
 				if (strpos($line, 'Acq. Date-Time') > 0){
 					$parser = new AgilentParser();
+					print("Detected Agilent file\n");
 					break;
-				}				
-
-				if (strpos($line, 'IS Name') > 0 && strpos($line, 'Component Name') > 0 && strpos($line, 'Retention Time') > 0){
-					$parser = new SciexParser();
-					break;
-				}				
-
+				}
 
 				if ($lIdx >= 10){ break; } // limit the #lines to read for detection
 			}
@@ -146,9 +149,9 @@
 
 				$tsvHeader = array();
 				$tsvHeader[] = 'sample';
-				//$tsvHeader[] = 'file';
 				$tsvHeader[] = 'type';
-				$tsvHeader[] = 'calno';
+                $tsvHeader[] = 'injection';
+                $tsvHeader[] = 'replicate';
 				$tsvHeader[] = 'batch';
 				$tsvHeader[] = 'order';
 				$tsvHeader[] = 'datetime';
@@ -158,7 +161,6 @@
 				$tsvHeader[] = 'compound_is';											
 				$tsvHeader[] = 'rt_is';
 				$tsvHeader[] = 'area_is';
-				$tsvHeader[] = "EOL";				
 				$this->tsv .= implode("\t", $tsvHeader) . "\n"; 
 
 
@@ -173,9 +175,9 @@
 									if (($measurement['compound']['name'] == $compound) && ($measurement['istd']['name'] == $istd)){
 										$tsvLine = array();
 										$tsvLine[] = $line['Sample']['name'];
-										//$tsvLine[] = $line['Sample']['file'];
 										$tsvLine[] = $line['Sample']['type'];
-										$tsvLine[] = $line['Sample']['calno'];
+                                        $tsvLine[] = $line['Sample']['injection'];
+                                        $tsvLine[] = $line['Sample']['replicate'];
 										$tsvLine[] = $line['Sample']['batch'];
 										$tsvLine[] = $line['Sample']['order'];
 										$tsvLine[] = $line['Sample']['datetime'];
@@ -185,7 +187,6 @@
 										$tsvLine[] = $istd;
 										$tsvLine[] = $measurement['istd']['rt'];
 										$tsvLine[] = $measurement['istd']['area'];
-										$tsvLine[] = "EOL";
 										
 										$this->tsv .= implode("\t", $tsvLine) . "\n";										
 									}
