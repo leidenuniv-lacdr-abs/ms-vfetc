@@ -149,6 +149,7 @@
 
 				$tsvHeader = array();
 				$tsvHeader[] = 'sample';
+				$tsvHeader[] = 'aliquot';
 				$tsvHeader[] = 'type';
                 $tsvHeader[] = 'injection';
                 $tsvHeader[] = 'replicate';
@@ -174,10 +175,11 @@
 								foreach ($line['Measurements'] as $mlIdx => $measurement){
 									if (($measurement['compound']['name'] == $compound) && ($measurement['istd']['name'] == $istd)){
 										$tsvLine = array();
-										$tsvLine[] = $line['Sample']['name'];
-										$tsvLine[] = $line['Sample']['type'];
+										$tsvLine[] = strtolower($line['Sample']['name']);
+										$tsvLine[] = strtolower($line['Sample']['aliquot']);
+										$tsvLine[] = strtolower($line['Sample']['type']);
                                         $tsvLine[] = $line['Sample']['injection'];
-                                        $tsvLine[] = $line['Sample']['replicate'];
+                                        $tsvLine[] = strtolower($line['Sample']['replicate']);
 										$tsvLine[] = $line['Sample']['batch'];
 										$tsvLine[] = $line['Sample']['order'];
 										$tsvLine[] = $line['Sample']['datetime'];

@@ -48,12 +48,11 @@
 							// check if this is the filename, then parse it for meta info
 							if ($fileHeader[0][$hlIdx] == 'Sample' && $fileHeader[1][$hlIdx] == 'Name'){
 
-								$fileDataRow[$fileHeader[0][$hlIdx]]['name'] = $hlVar; // add name
-
 								// sample type
 								$sampleType = 'sample';
 								if (strpos(strtolower($hlVar), 'blank_') >= 1){ $sampleType = 'blank'; }
 								if (strpos(strtolower($hlVar), 'qc_') >= 1){ $sampleType = 'qc'; }
+								if (strpos(strtolower($hlVar), 'sst_') >= 1){ $sampleType = 'sst'; }
 
 								$fileDataRow[$fileHeader[0][$hlIdx]]['calno'] = '';	
 								for ($intCal = 0; $intCal <= 15; $intCal++) {
@@ -63,8 +62,16 @@
 									}
 								}
 
-                                $fileDataRow[$fileHeader[0][$hlIdx]]['injection'] = (int) $fileDataRow[$fileHeader[0][$hlIdx]]['name'][-1];
-                                $fileDataRow[$fileHeader[0][$hlIdx]]['replicate'] = $fileDataRow[$fileHeader[0][$hlIdx]]['name'][-2];
+								$fileDataRow[$fileHeader[0][$hlIdx]]['aliquot'] = strtolower($hlVar); // add aliquot name
+
+                                $sampleName = substr($hlVar, 0, strpos(strtolower($hlVar), ($sampleType . "_")));
+                                if ($sampleName == "") { // must be a sample
+                                    $sampleName = substr(strtolower($hlVar), 0 , -3);
+                                }
+                                $fileDataRow[$fileHeader[0][$hlIdx]]['name'] = $sampleName;
+
+                                $fileDataRow[$fileHeader[0][$hlIdx]]['injection'] = (int) $fileDataRow[$fileHeader[0][$hlIdx]]['aliquot'][-1];
+                                $fileDataRow[$fileHeader[0][$hlIdx]]['replicate'] = $fileDataRow[$fileHeader[0][$hlIdx]]['aliquot'][-2];
 							
 								$fileDataRow[$fileHeader[0][$hlIdx]]['type'] = $sampleType;	
 								$fileDataRow[$fileHeader[0][$hlIdx]]['batch'] = $batch;	
@@ -133,7 +140,7 @@
 					$fileData[] = $fileDataRow;
 				}
 			}
-			//print '<pre>'; print_r($fileData); print '</pre>';
+			print '<pre>'; print_r($fileData); print '</pre>';
 			return $fileData;
 		}
 	}

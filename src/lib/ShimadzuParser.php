@@ -125,26 +125,33 @@
 
 					foreach ($compound['measurements'] as $cmIdx => $measurement) {
 
-						// save sample info
-						$sampleName = explode(".", $measurement['file'])[0];
+						// save aliquot info
+						$aliquotName = strtolower(explode(".", $measurement['file'])[0]);
 
 						// sample type
 						$sampleType = 'sample';
 						$calNo = '';
-						if (strpos(strtolower($sampleName), 'blank_') >= 1){ $sampleType = 'blank'; }
-						if (strpos(strtolower($sampleName), 'qc_') >= 1){ $sampleType = 'qc'; }
+						if (strpos($aliquotName, 'blank_') >= 1){ $sampleType = 'blank'; }
+						if (strpos($aliquotName, 'qc_') >= 1){ $sampleType = 'qc'; }
+						if (strpos($aliquotName, 'sst_') >= 1){ $sampleType = 'sst'; }
 						for ($intCal = 0; $intCal <= 15; $intCal++) {
-							if (strpos(strtolower($sampleName), 'cal' . $intCal . '_') >= 1){ 
+							if (strpos($aliquotName, 'cal' . $intCal . '_') >= 1){
 								$sampleType = 'cal'; 
 								$calNo = $intCal;	
 							}
 						}
 
-                        $injection = (int) $sampleName[-1];
-                        $replicate = $sampleName[-2];
+						$sampleName = substr($aliquotName, 0, strpos($aliquotName, ($sampleType . "_")));
+						if ($sampleName == "") { // must be a sample
+						    $sampleName = substr($aliquotName, 0 , -3);
+						}
+
+                        $injection = (int) $aliquotName[-1];
+                        $replicate = $aliquotName[-2];
 
 						$samples[$sampleName] = array(
 										'name'=>$sampleName,
+										'aliquot'=>$aliquotName,
 										'file'=>$measurement['file'],
 										'type'=>$sampleType,
 										'batch'=>$batch,

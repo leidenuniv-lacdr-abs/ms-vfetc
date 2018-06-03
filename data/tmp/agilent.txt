@@ -1,1 +1,1 @@
-sample	type	calno	batch	order	datetime	compound	rt	area	compound_is	rt_is	area_is	EOL
+sample	aliquot	type	injection	replicate	batch	order	datetime	compound	rt	area	compound_is	rt_is	area_is

@@ -27,7 +27,7 @@
 							$columnHeader = array_flip($lineParts);
 						} else {
 							// data
-							$sampleName = $lineParts[$columnHeader['Sample Name']];
+							$aliquotName = strtolower($lineParts[$columnHeader['Sample Name']]);
 							$compoundName = $lineParts[$columnHeader['Component Name']];
 
 							if (strpos($compoundName, '_ISTD') || strpos($compoundName, '-ISTD')) {
@@ -38,42 +38,47 @@
 
 								$datetime = $lineParts[$columnHeader['Acquisition Date & Time']];
 
-								if (!isset($samples[$sampleName])){
-									$samples[$sampleName] = array();
-									$samples[$sampleName]['Sample'] = array();
-									$samples[$sampleName]['Measurements'] = array();
+								if (!isset($samples[$aliquotName])){
+									$samples[$aliquotName] = array();
+									$samples[$aliquotName]['Sample'] = array();
+									$samples[$aliquotName]['Measurements'] = array();
 								}
 
-								$samples[$sampleName]['Sample']['name'] = $sampleName;
-								$samples[$sampleName]['Sample']['batch'] = $batch;
+								$samples[$aliquotName]['Sample']['batch'] = $batch;
 
 								$fileParts = explode(DIRECTORY_SEPARATOR,$file);
-								$samples[$sampleName]['Sample']['file'] = end($fileParts);
+								$samples[$aliquotName]['Sample']['file'] = end($fileParts);
 
-								// TODO
-								$samples[$sampleName]['Sample']['order'] = '';
-								$samples[$sampleName]['Sample']['datetime'] = $this->parseDate($datetime);
+								$samples[$aliquotName]['Sample']['order'] = '';
+								$samples[$aliquotName]['Sample']['datetime'] = $this->parseDate($datetime);
 
 								// sample type
 								$sampleType = 'sample';
 								$calno = '';
-								if (strpos(strtolower($sampleName), 'blank_') >= 1){ $sampleType = 'blank'; }
-								if (strpos(strtolower($sampleName), 'qc_') >= 1){ $sampleType = 'qc'; }
-								if (strpos(strtolower($sampleName), 'sst_') >= 1){ $sampleType = 'sst'; }
+								if (strpos($aliquotName, 'blank_') >= 1){ $sampleType = 'blank'; }
+								if (strpos($aliquotName, 'qc_') >= 1){ $sampleType = 'qc'; }
+								if (strpos($aliquotName, 'sst_') >= 1){ $sampleType = 'sst'; }
 								for ($intCal = 0; $intCal <= 15; $intCal++) {
-									if (strpos(strtolower($sampleName), 'cal' . $intCal . '_') >= 1){ 
+									if (strpos($aliquotName, 'cal' . $intCal . '_') >= 1){
 										$sampleType = 'cal'; 
 										$calno = $intCal;	
 									}
 								}
 
-                                $samples[$sampleName]['Sample']['injection'] = (int) $sampleName[-1];
-                                $samples[$sampleName]['Sample']['replicate'] = $sampleName[-2];
+                                $sampleName = substr($aliquotName, 0, strpos($aliquotName, ($sampleType . "_")));
+                                if ($sampleName == "") { // must be a sample
+                                    $sampleName = substr($aliquotName, 0 , -3);
+                                }
+								$samples[$aliquotName]['Sample']['name'] = $sampleName;
+								$samples[$aliquotName]['Sample']['aliquot'] = $aliquotName;
 
-								$samples[$sampleName]['Sample']['type'] = $sampleType;	
-								$samples[$sampleName]['Sample']['calno'] = $calno;					
+                                $samples[$aliquotName]['Sample']['injection'] = (int) $aliquotName[-1];
+                                $samples[$aliquotName]['Sample']['replicate'] = $aliquotName[-2];
 
-								$samples[$sampleName]['Measurements'][] = array(
+								$samples[$aliquotName]['Sample']['type'] = $sampleType;
+								$samples[$aliquotName]['Sample']['calno'] = $calno;
+
+								$samples[$aliquotName]['Measurements'][] = array(
 									'compound'=>array(
 													'name'=>$lineParts[$columnHeader['Component Name']],
 													'area'=>($lineParts[$columnHeader['Area']] != 'N/A') ? $lineParts[$columnHeader['Area']] : '',
@@ -117,7 +122,7 @@
 
 			} catch(Exception $e){
 
-				$this->setError('Final construction of raw data array failes for file '.$file.' . Error: '. $e->getMessage());
+				$this->setError('Final construction of raw data array fails for file '.$file.' . Error: '. $e->getMessage());
 
 			}
 
