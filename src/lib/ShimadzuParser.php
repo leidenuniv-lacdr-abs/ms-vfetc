@@ -149,7 +149,7 @@
                         $injection = (int) $aliquotName[-1];
                         $replicate = $aliquotName[-2];
 
-						$samples[$sampleName] = array(
+						$samples[$aliquotName] = array(
 										'name'=>$sampleName,
 										'aliquot'=>$aliquotName,
 										'file'=>$measurement['file'],
@@ -162,10 +162,10 @@
 									);
 
 						// save measurement
-						if (!isset($measurements[$sampleName])){ $measurements[$sampleName] = array(); }
+						if (!isset($measurements[$aliquotName])){ $measurements[$aliquotName] = array(); }
 											
 						// keep track of sample measurements
-						$measurements[$sampleName][] = array(
+						$measurements[$aliquotName][] = array(
 															'compound' => array(
 																'name'=>$compound['name'],
 																'rt'=>$measurement['rt'],
@@ -195,7 +195,7 @@
 				array_multisort($acquisitionDate, SORT_ASC, $samples);			
 
 				$sampleOrderCount = 1;
-				foreach ($samples as $sIdx => $sample){
+				foreach ($samples as $sIdx => $aliquot){
 					$samples[$sIdx]['order'] = $sampleOrderCount;
 					$sampleOrderCount++;
 				}
@@ -209,10 +209,10 @@
 				array_multisort($batchSort, SORT_ASC, $orderSort, SORT_ASC, $samples);			
 
 
-				foreach ($samples as $sIdx => $sample){
+				foreach ($samples as $sIdx => $aliquot){
 					$fileData[] = array(
-							'Sample'=>$sample,
-							'Measurements'=>$measurements[$sample['name']]
+							'Sample'=>$aliquot,
+							'Measurements'=>$measurements[$aliquot['aliquot']]
 						);
 				}				
 
