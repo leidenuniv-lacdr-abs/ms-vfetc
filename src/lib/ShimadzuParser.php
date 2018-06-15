@@ -141,9 +141,20 @@
 							}
 						}
 
-						$sampleName = substr($aliquotName, 0, strpos($aliquotName, ($sampleType . "_")));
+                        if ($sampleType == 'cal'){
+                            $sampleName = substr($aliquotName, 0, strpos($aliquotName, ($sampleType . $calNo . "_")));
+                        } else {
+						    $sampleName = substr($aliquotName, 0, strpos($aliquotName, ($sampleType . "_")));
+						}
 						if ($sampleName == "") { // must be a sample
 						    $sampleName = substr($aliquotName, 0 , -3);
+						}
+
+						if ($sampleType != 'sample'){
+						    $sampleName = $sampleName . "_" . $sampleType;
+						    if ($sampleType == 'cal'){
+						        $sampleName = $sampleName . $calNo;
+						    }
 						}
 
                         $injection = (int) $aliquotName[-1];
@@ -172,7 +183,7 @@
 																'area'=>$measurement['area']
 															),
 															'istd' => array(
-																'name'=>$compoundIstd[$compound['name']],
+															    'name'=>isset($compoundIstd[$compound['name']]) ? $compoundIstd[$compound['name']] : $compound['name'] . "_ISTD",
 																'rt'=>$measurement['istd_rt'],
 																'area'=>$measurement['istd_area']
 															)

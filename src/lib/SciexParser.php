@@ -65,10 +65,23 @@
 									}
 								}
 
-                                $sampleName = substr($aliquotName, 0, strpos($aliquotName, ($sampleType . "_")));
+                                if ($sampleType == 'cal'){
+                                    $sampleName = substr($aliquotName, 0, strpos($aliquotName, ($sampleType . $calno . "_")));
+                                } else {
+                                    $sampleName = substr($aliquotName, 0, strpos($aliquotName, ($sampleType . "_")));
+                                }
+
                                 if ($sampleName == "") { // must be a sample
                                     $sampleName = substr($aliquotName, 0 , -3);
                                 }
+
+                                if ($sampleType != 'sample'){
+                                    $sampleName = $sampleName . "_" . $sampleType;
+                                    if ($sampleType == 'cal'){
+                                        $sampleName = $sampleName . $calno;
+                                    }
+                                }
+
 								$samples[$aliquotName]['Sample']['name'] = $sampleName;
 								$samples[$aliquotName]['Sample']['aliquot'] = $aliquotName;
 
@@ -85,7 +98,7 @@
 													'rt'=>($lineParts[$columnHeader['Retention Time']] != 'N/A') ? $lineParts[$columnHeader['Retention Time']] : '',
 												),
 									'istd'=>	array(
-													'name'=>$lineParts[$columnHeader['IS Name']],
+									                'name'=>isset($lineParts[$columnHeader['IS Name']]) ? $lineParts[$columnHeader['IS Name']] : $lineParts[$columnHeader['Component Name']] . "_ISTD",
 													'area'=>($lineParts[$columnHeader['IS Area']]) != 'N/A' ? $lineParts[$columnHeader['IS Area']] : '',
 													'rt'=>($lineParts[$columnHeader['IS Retention Time']] != 'N/A') ? $lineParts[$columnHeader['IS Retention Time']] : '',
 												),								

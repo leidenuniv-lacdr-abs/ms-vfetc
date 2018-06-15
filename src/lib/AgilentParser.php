@@ -64,10 +64,23 @@
 
 								$fileDataRow[$fileHeader[0][$hlIdx]]['aliquot'] = strtolower($hlVar); // add aliquot name
 
-                                $sampleName = substr($hlVar, 0, strpos(strtolower($hlVar), ($sampleType . "_")));
+                                if ($sampleType == 'cal'){
+                                    $sampleName = substr(strtolower($hlVar), 0, strpos(strtolower($hlVar), ($sampleType . $fileDataRow[$fileHeader[0][$hlIdx]]['calno'] . "_")));
+                                } else {
+                                    $sampleName = substr(strtolower($hlVar), 0, strpos(strtolower($hlVar), ($sampleType . "_")));
+                                }
+
                                 if ($sampleName == "") { // must be a sample
                                     $sampleName = substr(strtolower($hlVar), 0 , -3);
                                 }
+
+                                if ($sampleType != 'sample'){
+                                    $sampleName = $sampleName . "_" . $sampleType;
+                                    if ($sampleType == 'cal'){
+                                        $sampleName = $sampleName . $fileDataRow[$fileHeader[0][$hlIdx]]['calno'];
+                                    }
+                                }
+
                                 $fileDataRow[$fileHeader[0][$hlIdx]]['name'] = $sampleName;
 
                                 $fileDataRow[$fileHeader[0][$hlIdx]]['injection'] = (int) $fileDataRow[$fileHeader[0][$hlIdx]]['aliquot'][-1];
