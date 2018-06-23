@@ -36,7 +36,7 @@
         $path_parts = pathinfo($file);
         $path_parts['tmpdir'] = $path_parts['dirname'] . DIRECTORY_SEPARATOR . $tmpfolder;
         mkdir($path_parts['tmpdir'], 0777, TRUE);
-        if (strtolower($path_parts['extension']) == 'zip') {
+        if (in_array(strtolower($path_parts['extension']), array('zip', 'dat'))) {
             print("\nAdding zipped file: " . $file);
             $zip = new ZipArchive;
             $zip->open($file);
