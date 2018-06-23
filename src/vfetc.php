@@ -30,15 +30,37 @@
 	$files = explode(',',$_GET['files']);
 	$outputfile = $_GET['outputfile'];
 
-	foreach ($files as $key => $file) {
-		print("\nAdding file: " . $file);
-	}
-	print("\nSettings output path to: " . $outputfile . "\n");
+	$tmpfolder = time();
+	$input_files = [];
+    foreach ($files as $fIdx => $file) {
+        $path_parts = pathinfo($file);
+        $path_parts['tmpdir'] = DIRECTORY_SEPARATOR . $path_parts['dirname'] . DIRECTORY_SEPARATOR . $tmpfolder;
+        mkdir($path_parts['tmpdir'], 0777, TRUE);
+        $file_parts = explode(".", $file);
+        if (strtolower(end($file_parts)) == 'zip') {
+            print("\nAdding zipped file: " . $file);
+            $zip = new ZipArchive;
+            $zip->open($file);
+            $zip->extractTo($path_parts['tmpdir']);
+            $zip->close();
 
+            foreach (scandir($path_parts['tmpdir']) as $sdIdx => $f) {
+                $file_info = pathinfo($f);
+                if (strtolower($file_info['extension']) != '') {
+                    $input_files[] = $path_parts['tmpdir'] . DIRECTORY_SEPARATOR . $f;
+                }
+            }
+        } else {
+            print("\nAdding file: " . $file);
+            $input_files[] = $file;
+        }
+    }
+
+	print("\nSettings output path to: " . $outputfile . "\n");
 
 	$parsers = array();
 	$parserDetect = new ParserDetect();
-	foreach ($files as $fIdx => $file){ 
+	foreach ($input_files as $fIdx => $file){
 
 		// filter out BOM
 		file_put_contents($file, remove_utf8_bom(file_get_contents($file)));
@@ -60,7 +82,7 @@
 	foreach ($parsers as $pIdx => $parser){
 		
 		if (!$parser->hasErrors()){ // no errors > write results to file
-			file_put_contents($outputfile, $parser->getDataAsTsv()); 			
+            file_put_contents($outputfile, $parser->getDataAsTsv());
 		} else { // errors > display them
 			print_r($parser->getErrors()); 
 			exit(1);			
