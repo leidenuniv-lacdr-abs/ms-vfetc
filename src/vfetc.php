@@ -34,10 +34,9 @@
 	$input_files = [];
     foreach ($files as $fIdx => $file) {
         $path_parts = pathinfo($file);
-        $path_parts['tmpdir'] = DIRECTORY_SEPARATOR . $path_parts['dirname'] . DIRECTORY_SEPARATOR . $tmpfolder;
+        $path_parts['tmpdir'] = $path_parts['dirname'] . DIRECTORY_SEPARATOR . $tmpfolder;
         mkdir($path_parts['tmpdir'], 0777, TRUE);
-        $file_parts = explode(".", $file);
-        if (strtolower(end($file_parts)) == 'zip') {
+        if (strtolower($path_parts['extension']) == 'zip') {
             print("\nAdding zipped file: " . $file);
             $zip = new ZipArchive;
             $zip->open($file);
