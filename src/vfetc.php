@@ -23,7 +23,7 @@
 
 	// check for required input parameters
 	if (!isset($_GET['files']) || !isset($_GET['outputfile'])){
-		print("Incorrect input parameters");
+		print("\nIncorrect input parameters");
 		exit(1);
 	}
 
@@ -73,7 +73,7 @@
 			
 			$parsers[$parserClass]->addFile($file);
 		} else {
-			print('Parser detection failed');
+			print('\nParser detection failed');
 			exit(1);			
 		}
 	}
@@ -97,10 +97,14 @@
 		
 			$parser = null;
 
+			print("\n... trying to detect the correct parser for file: " . $file . "\n");
+
 			// all files are expected to be text, so start reading the lines
 			$lines = file($file);
 
 			foreach ($lines as $lIdx => $line){
+
+			    print("\n" . $line);
 
 				if (strpos($line, 'Compound Summary Report') > 0){
 					$parser = new WatersParser();
