@@ -1,7 +1,8 @@
 # ms-vfetc
 Mass spectrometry vendor feature export tool converter. Compatible with Agilent, Sciex, Shimadzu and Waters exported data.
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/10a7549f7e834de5adc61359748c9881)](https://www.codacy.com/app/michaelvanvliet/ms-vfetc?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=leidenuniv-lacdr-abs/ms-vfetc&amp;utm_campaign=Badge_Grade)
+
+[![Build Status](https://travis-ci.org/leidenuniv-lacdr-abs/ms-vfetc.svg?branch=master)](https://travis-ci.org/leidenuniv-lacdr-abs/ms-vfetc) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/10a7549f7e834de5adc61359748c9881)](https://www.codacy.com/app/michaelvanvliet/ms-vfetc?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=leidenuniv-lacdr-abs/ms-vfetc&amp;utm_campaign=Badge_Grade)
 
 # How to use
 ------
