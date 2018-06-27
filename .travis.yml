@@ -1,3 +1,5 @@
 language: php
 php:
   - '7.0'
+script: 
+  - php -f src/vfetc.php files=data/vendor/sciex/example_batch1.txt outputfile=data/tmp/sciex.txt
