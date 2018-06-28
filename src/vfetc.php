@@ -35,7 +35,12 @@
     foreach ($files as $fIdx => $file) {
         $path_parts = pathinfo($file);
         $path_parts['tmpdir'] = $path_parts['dirname'] . DIRECTORY_SEPARATOR . $tmpfolder;
-        mkdir($path_parts['tmpdir'], 0777, TRUE);
+
+        # create a temp folder if it doesn't exist
+        if (!is_dir($path_parts['tmpdir'])) {
+            mkdir($path_parts['tmpdir'], 0777, TRUE);
+        }
+
         if (in_array(strtolower($path_parts['extension']), array('zip', 'dat'))) {
             print("\nAdding zipped file: " . $file);
             $zip = new ZipArchive;
