@@ -99,12 +99,12 @@
 				$compounds[] = $compound;
 			}
 
-			try {
+            try {
 				$istds = array();
 				foreach ($compounds as $cIdx => $compound){
 					foreach ($compound['measurements'] as $cmIdx => $measurement) {
 						if ($measurement['area'] != '' && ($measurement['area'] == $measurement['istd_area'])){ // then it must be a istd
-							$istds[$measurement['rt'] . '|' . $measurement['area']] = $compound['name'];
+							$istds[$measurement['file'] . '|' . $measurement['rt'] . '|' . $measurement['area']] = $compound['name'];
 						}
 
 					}
@@ -116,7 +116,11 @@
 					$compoundIstd[$compound['name']] = array(); 
 					foreach ($compound['measurements'] as $cmIdx => $measurement) {
 						if ($measurement['istd_rt'] && $measurement['istd_area']){
-							$compoundIstd[$compound['name']] = $istds[$measurement['istd_rt'] . '|' . $measurement['istd_area']];
+						    if (isset($istds[$measurement['file'] . '|' . $measurement['istd_rt'] . '|' . $measurement['istd_area']])) {
+                                $compoundIstd[$compound['name']] = $istds[$measurement['file'] . '|' . $measurement['istd_rt'] . '|' . $measurement['istd_area']];
+                            } else {
+                                $compoundIstd[$compound['name']] = 'unknown';
+                            }
 						}
 					}
 				}

@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 
 <?php
+    error_reporting( E_ALL );
+
 
 	/* MS Vendor feature export converter */
 
@@ -92,6 +94,9 @@
 			exit(1);			
 		}
 	}
+
+    rmdir($path_parts['tmpdir']); # cleanup
+
 
 	class ParserDetect {
 

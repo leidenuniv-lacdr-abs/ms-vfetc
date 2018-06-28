@@ -179,8 +179,8 @@
 																	'area'=>$measurement['area']
 																),
 																'istd' => array(
-																	'name'=>isset($compoundIstd[$compound['name']]) ? $compoundIstd[$compound['name']] : $compound['name'] . "_ISTD",
-																	'rt'=>isset($istdDetails[$compoundIstd[$compound['name']]][$measurement['istd_area']]) ? $istdDetails[$compoundIstd[$compound['name']]][$measurement['istd_area']] : '',
+																	'name'=>$compound['name'] . "_ISTD",
+																	'rt'=> 0,
 																	'area'=>$measurement['istd_area']
 																)
 															);
